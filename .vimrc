@@ -135,7 +135,7 @@ cnoreabbrev cm Cm
 cnoreabbrev uc Uc
 
 
-" Insert import pdb; pdb.set_trace() by a keystroke  
+" Insert import pdb; pdb.set_trace() by keystroke \p 
 map <Leader>p :call InsertLine()<CR>
 
 function! InsertLine()
