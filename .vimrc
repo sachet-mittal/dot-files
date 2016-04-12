@@ -125,3 +125,20 @@ autocmd BufWritePre *.py :%s/\s\+$//e
 xnoremap < <gv
 xnoremap > >gv
 
+" Make :w act same as :w
+cnoreabbrev W w
+
+" Comment/uncomment lines :start,end Cm
+command -range Cm <line1>,<line2>s/^/#/
+command -range Uc <line1>,<line2>s/^#//
+cnoreabbrev cm Cm
+cnoreabbrev uc Uc
+
+
+" Insert import pdb; pdb.set_trace() by a keystroke  
+map <Leader>p :call InsertLine()<CR>
+
+function! InsertLine()
+  let trace = expand("import pdb; pdb.set_trace()")
+  execute "normal o".trace
+endfunction
