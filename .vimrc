@@ -5,12 +5,13 @@ set rtp+=~/.vim/bundle/Vundle.vim/
 call vundle#rc()
 
 " let Vundle manage Vundle
-" required! 
+" required!
 Bundle 'gmarik/vundle'
 
 " The bundles you install will be listed here
 Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-unimpaired'
 Bundle 'scrooloose/nerdtree'
 Bundle 'klen/python-mode'
 Bundle 'davidhalter/jedi-vim'
@@ -19,6 +20,8 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'ggreer/the_silver_searcher'
 Bundle 'scrooloose/syntastic'
 Bundle 'tpope/vim-surround'
+Plugin 'tmhedberg/SimpylFold'
+
 filetype plugin indent on
 augroup vimrc_autocmds
      autocmd!
@@ -86,9 +89,9 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
-" more subtle popup colors 
+" more subtle popup colors
 if has ('gui_running')
-    highlight Pmenu guibg=#cccccc gui=bold    
+    highlight Pmenu guibg=#cccccc gui=bold
 endif
 
 
@@ -102,13 +105,13 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 " Syntastic setup
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
 
 
-"" show a visual line under the cursor's current line 
+"" show a visual line under the cursor's current line
 set cursorline
 
 " show the matching part of the pair for [] {} and ()
@@ -120,7 +123,7 @@ set showmatch
 autocmd BufWritePre *.py :%s/\s\+$//e
 
 
-" Reselect visual block after indent/outdent  
+" Reselect visual block after indent/outdent
 "
 xnoremap < <gv
 xnoremap > >gv
@@ -135,10 +138,38 @@ cnoreabbrev cm Cm
 cnoreabbrev uc Uc
 
 
-" Insert import pdb; pdb.set_trace() by keystroke \p 
+" Insert import pdb; pdb.set_trace() by keystroke \p
 map <Leader>p :call InsertLine()<CR>
 
 function! InsertLine()
   let trace = expand("import pdb; pdb.set_trace()")
   execute "normal o".trace
 endfunction
+
+" SimplIFold configuration
+"
+" to enable previewing of your folded classes' and functions' docstrings in
+" the fold text,
+let g:SimpylFold_docstring_preview = 1
+
+" to not  see your docstrings folded
+let g:SimpylFold_fold_docstring = 0
+
+" to not see your your imports folded
+let g:SimpylFold_fold_import = 0
+
+autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
+autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
+
+" Case insensitive search
+set ignorecase
+
+" Strip training whitespaces on exit
+autocmd BufWritePre *.py :%s/\s\+$//e
+autocmd BufWritePre *.yaml :%s/\s\+$//e
+
+" Use <F11> to toggle between 'paste' and 'nopaste'
+set pastetoggle=<F11>
+
+" Running python code form inside vim by pressing F9
+nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
